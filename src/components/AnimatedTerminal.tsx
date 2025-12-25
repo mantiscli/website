@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { animate, scroll, inView } from "motion";
 
 export interface TerminalLine {
   text: string;
@@ -29,7 +28,7 @@ export function AnimatedTerminal({
   const [displayedLines, setDisplayedLines] = useState<string[]>([]);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
-  const [isActive, setIsActive] = useState(!triggerOnView);
+  const [isActive, setIsActive] = useState(true); // Start immediately, don't wait for scroll
   const [showCursor, setShowCursor] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -45,17 +44,10 @@ export function AnimatedTerminal({
     return { text, pause: 0 };
   }, []);
 
-  // Motion scroll-linked: trigger animation when in view
+  // Animation starts immediately on mount
   useEffect(() => {
-    if (!triggerOnView || !terminalRef.current) return;
-
-    const cleanup = inView(terminalRef.current, () => {
-      setIsActive(true);
-      return () => {}; // cleanup when out of view
-    }, { margin: "-100px" });
-
-    return cleanup;
-  }, [triggerOnView]);
+    setIsActive(true);
+  }, []);
 
   // Cursor blink effect (Typed.js style)
   useEffect(() => {
