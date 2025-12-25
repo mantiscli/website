@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, useInView } from "motion/react";
 
 // Mantis CLI output with color tokens
 const MANTIS_OUTPUT = [
@@ -58,127 +58,68 @@ const colorClasses: Record<string, string> = {
   default: "text-foreground/80",
 };
 
-interface ScrollTerminalProps {
-  className?: string;
-}
-
-export function ScrollTerminal({ className = "" }: ScrollTerminalProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Map scroll progress to character count
-  const charCount = useTransform(scrollYProgress, [0.1, 0.7], [0, TOTAL_CHARS]);
-
-  return (
-    <div ref={containerRef} className={`relative ${className}`}>
-      <div className="terminal glow-green max-w-3xl mx-auto sticky top-24">
-        <div className="terminal-header">
-          <div className="terminal-dot red" />
-          <div className="terminal-dot yellow" />
-          <div className="terminal-dot green" />
-          <span className="text-muted-foreground text-sm ml-3 font-medium">
-            mantis — bash
-          </span>
-        </div>
-        <div className="terminal-body text-sm leading-relaxed min-h-[400px] max-h-[500px] overflow-hidden">
-          <motion.pre className="font-mono whitespace-pre">
-            <ScrollText charCount={charCount} lines={MANTIS_OUTPUT} />
-          </motion.pre>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Component that renders text based on character count
-function ScrollText({
-  charCount,
-  lines
-}: {
-  charCount: ReturnType<typeof useTransform<number, number>>;
-  lines: typeof MANTIS_OUTPUT;
-}) {
-  const chars = useTransform(charCount, (count) => Math.floor(count));
-
-  return (
-    <motion.span>
-      {lines.map((line, lineIndex) => {
-        const lineStart = lines
-          .slice(0, lineIndex)
-          .reduce((acc, l) => acc + l.text.length + 1, 0);
-
-        return (
-          <ScrollLine
-            key={lineIndex}
-            text={line.text}
-            color={line.color}
-            lineStart={lineStart}
-            charCount={chars}
-          />
-        );
-      })}
-    </motion.span>
-  );
-}
-
-// Individual line that reveals based on scroll
-function ScrollLine({
-  text,
-  color,
-  lineStart,
-  charCount,
-}: {
-  text: string;
-  color: string;
-  lineStart: number;
-  charCount: ReturnType<typeof useTransform<number, number>>;
-}) {
-  const visibleText = useTransform(charCount, (count) => {
-    const lineEnd = lineStart + text.length;
-    if (count <= lineStart) return "";
-    if (count >= lineEnd) return text + "\n";
-    return text.slice(0, count - lineStart);
-  });
-
-  const showCursor = useTransform(charCount, (count) => {
-    const lineEnd = lineStart + text.length;
-    return count > lineStart && count < lineEnd;
-  });
-
-  return (
-    <motion.span className={colorClasses[color] || colorClasses.default}>
-      <motion.span>{visibleText}</motion.span>
-      <motion.span
-        className="text-primary"
-        style={{ opacity: useTransform(showCursor, (show) => show ? 1 : 0) }}
-      >
-        █
-      </motion.span>
-    </motion.span>
-  );
-}
-
-// Compact version for hero section
+// Hero terminal with auto-typing animation triggered on view
 export function HeroScrollTerminal() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: false, margin: "-50px" });
+  const [charCount, setCharCount] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 0.8", "end 0.2"],
-  });
+  // Cursor blink
+  useEffect(() => {
+    const interval = setInterval(() => setShowCursor(prev => !prev), 530);
+    return () => clearInterval(interval);
+  }, []);
 
-  const charCount = useTransform(scrollYProgress, [0, 1], [0, TOTAL_CHARS]);
-  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0.5, 1, 1, 0.5]);
-  const scale = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0.95, 1, 1, 0.95]);
+  // Start typing when in view
+  useEffect(() => {
+    if (isInView && !isTyping && charCount < TOTAL_CHARS) {
+      setIsTyping(true);
+    }
+    if (!isInView && charCount > 0) {
+      // Reverse when out of view (scrolling up)
+      setIsTyping(false);
+      const interval = setInterval(() => {
+        setCharCount(prev => {
+          if (prev <= 0) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 3; // Faster reverse
+        });
+      }, 5);
+      return () => clearInterval(interval);
+    }
+  }, [isInView, isTyping, charCount]);
+
+  // Typing animation
+  useEffect(() => {
+    if (!isTyping) return;
+
+    const interval = setInterval(() => {
+      setCharCount(prev => {
+        if (prev >= TOTAL_CHARS) {
+          setIsTyping(false);
+          clearInterval(interval);
+          return TOTAL_CHARS;
+        }
+        // Variable speed based on character
+        const currentChar = getCharAtPosition(prev);
+        const speed = currentChar === '\n' ? 2 : 1;
+        return prev + speed;
+      });
+    }, 25);
+
+    return () => clearInterval(interval);
+  }, [isTyping]);
 
   return (
     <motion.div
       ref={containerRef}
-      style={{ opacity, scale }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.3 }}
       className="terminal glow-green max-w-3xl mx-auto transition-shadow duration-500 hover:shadow-2xl hover:shadow-primary/20"
     >
       <div className="terminal-header">
@@ -190,10 +131,118 @@ export function HeroScrollTerminal() {
         </span>
       </div>
       <div className="terminal-body text-sm leading-relaxed min-h-[380px] overflow-hidden">
-        <motion.pre className="font-mono whitespace-pre">
-          <ScrollText charCount={charCount} lines={MANTIS_OUTPUT} />
-        </motion.pre>
+        <pre className="font-mono whitespace-pre">
+          {renderLines(charCount, showCursor)}
+        </pre>
       </div>
     </motion.div>
   );
+}
+
+// Get character at a specific position in the output
+function getCharAtPosition(pos: number): string {
+  let currentPos = 0;
+  for (const line of MANTIS_OUTPUT) {
+    if (currentPos + line.text.length >= pos) {
+      return line.text[pos - currentPos] || '\n';
+    }
+    currentPos += line.text.length + 1;
+  }
+  return '';
+}
+
+// Render lines up to character count
+function renderLines(charCount: number, showCursor: boolean) {
+  let currentPos = 0;
+  const elements: React.ReactElement[] = [];
+
+  for (let i = 0; i < MANTIS_OUTPUT.length; i++) {
+    const line = MANTIS_OUTPUT[i];
+    const lineStart = currentPos;
+    const lineEnd = lineStart + line.text.length;
+
+    if (charCount <= lineStart) {
+      // Haven't reached this line yet
+      break;
+    }
+
+    const visibleLength = Math.min(charCount - lineStart, line.text.length);
+    const visibleText = line.text.slice(0, visibleLength);
+    const isCurrentLine = charCount > lineStart && charCount <= lineEnd;
+
+    elements.push(
+      <span key={i} className={colorClasses[line.color] || colorClasses.default}>
+        {visibleText}
+        {isCurrentLine && showCursor && <span className="text-primary font-bold">█</span>}
+        {charCount > lineEnd && '\n'}
+      </span>
+    );
+
+    currentPos = lineEnd + 1;
+  }
+
+  // Show cursor at start if nothing typed yet
+  if (charCount === 0 && showCursor) {
+    elements.unshift(
+      <span key="cursor" className="text-primary font-bold">█</span>
+    );
+  }
+
+  return elements;
+}
+
+// Full-page scroll-linked terminal for demo sections
+export function ScrollTerminal({ className = "" }: { className?: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const charCount = useTransform(scrollYProgress, [0.1, 0.7], [0, TOTAL_CHARS]);
+
+  return (
+    <div ref={containerRef} className={`relative min-h-[150vh] ${className}`}>
+      <div className="terminal glow-green max-w-3xl mx-auto sticky top-24">
+        <div className="terminal-header">
+          <div className="terminal-dot red" />
+          <div className="terminal-dot yellow" />
+          <div className="terminal-dot green" />
+          <span className="text-muted-foreground text-sm ml-3 font-medium">
+            mantis — bash
+          </span>
+        </div>
+        <div className="terminal-body text-sm leading-relaxed min-h-[400px] max-h-[500px] overflow-hidden">
+          <motion.pre className="font-mono whitespace-pre">
+            <ScrollLinkedText charCount={charCount} />
+          </motion.pre>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Scroll-linked text renderer
+function ScrollLinkedText({
+  charCount,
+}: {
+  charCount: ReturnType<typeof useTransform<number, number>>;
+}) {
+  const [count, setCount] = useState(0);
+  const [showCursor, setShowCursor] = useState(true);
+
+  // Subscribe to motion value
+  useEffect(() => {
+    const unsubscribe = charCount.on("change", (v) => setCount(Math.floor(v)));
+    return unsubscribe;
+  }, [charCount]);
+
+  // Cursor blink
+  useEffect(() => {
+    const interval = setInterval(() => setShowCursor(prev => !prev), 530);
+    return () => clearInterval(interval);
+  }, []);
+
+  return <>{renderLines(count, showCursor)}</>;
 }

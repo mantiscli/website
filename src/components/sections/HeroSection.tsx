@@ -20,7 +20,7 @@ export function HeroSection() {
         <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
           See every connection.
           <br />
-          <span className="text-primary text-glow">Control every layer.</span>
+          <span className="text-shimmer">Control every layer.</span>
         </h1>
 
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
