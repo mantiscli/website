@@ -48,9 +48,9 @@ export function FeaturesSection() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            6 layers of protection,
+            Six layers of protection,
             <br />
-            <span className="text-primary">1 command to rule them all</span>
+            <span className="text-primary">One command to rule them all</span>
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
             Stop juggling multiple apps. Mantis gives you complete visibility
