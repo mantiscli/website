@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +22,7 @@ import {
 
 function HeroTerminal() {
   return (
-    <div className="terminal glow-green max-w-3xl mx-auto">
+    <div className="terminal glow-green max-w-3xl mx-auto transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20">
       <div className="terminal-header">
         <div className="terminal-dot red" />
         <div className="terminal-dot yellow" />
@@ -63,8 +65,8 @@ function HeroTerminal() {
 function SocialProofQuote() {
   return (
     <div className="py-12 px-6 bg-card/30">
-      <div className="max-w-3xl mx-auto text-center">
-        <Quote className="w-8 h-8 text-primary/50 mx-auto mb-4" />
+      <div className="max-w-3xl mx-auto text-center group">
+        <Quote className="w-8 h-8 text-primary/50 mx-auto mb-4 transition-all duration-500 group-hover:text-primary group-hover:scale-110" />
         <blockquote className="text-xl md:text-2xl font-medium mb-4">
           &ldquo;Finally, one command to see my entire security stack. No more juggling 5 different apps.&rdquo;
         </blockquote>
@@ -86,9 +88,9 @@ function Feature({
   description: string;
 }) {
   return (
-    <Card className="bg-card/50 border-border/50 hover:border-primary/30 transition-all hover:shadow-lg hover:shadow-primary/5">
+    <Card className="bg-card/50 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 group">
       <CardContent className="p-6">
-        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
           <Icon className="w-6 h-6 text-primary" />
         </div>
         <h3 className="text-lg font-semibold mb-2">{title}</h3>
@@ -100,7 +102,7 @@ function Feature({
 
 function CommandDemo({ command, output }: { command: string; output: string }) {
   return (
-    <div className="terminal">
+    <div className="terminal transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5">
       <div className="terminal-header">
         <div className="terminal-dot red" />
         <div className="terminal-dot yellow" />
@@ -144,9 +146,9 @@ function CompetitorComparison() {
             {competitors.map((comp) => (
               <div
                 key={comp.name}
-                className="flex items-center gap-4 p-4 rounded-lg bg-card/50 border border-border/50"
+                className="flex items-center gap-4 p-4 rounded-lg bg-card/50 border border-border/50 transition-all duration-300 hover:bg-card/70 hover:border-border group"
               >
-                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground font-bold text-sm">
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground font-bold text-sm transition-transform duration-300 group-hover:scale-105">
                   {comp.name.charAt(0)}
                 </div>
                 <div>
@@ -158,10 +160,10 @@ function CompetitorComparison() {
           </div>
 
           <div className="space-y-6">
-            <Card className="bg-primary/5 border-primary/20">
+            <Card className="bg-primary/5 border-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 group">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Shield className="w-8 h-8 text-primary" />
+                  <Shield className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
                   <div>
                     <div className="font-bold text-lg">Mantis</div>
                     <div className="text-sm text-muted-foreground">Unified Security Control</div>
@@ -229,13 +231,13 @@ function Testimonials() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {testimonials.map((t, i) => (
-            <Card key={i} className="bg-card/50 border-border/50">
+            <Card key={i} className="bg-card/50 border-border/50 transition-all duration-300 hover:border-border hover:shadow-lg hover:-translate-y-1 group">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-3">
                   {t.platform === "twitter" ? (
-                    <Twitter className="w-4 h-4 text-[#1DA1F2]" />
+                    <Twitter className="w-4 h-4 text-[#1DA1F2] transition-transform duration-300 group-hover:scale-110" />
                   ) : (
-                    <MessageCircle className="w-4 h-4 text-[#FF4500]" />
+                    <MessageCircle className="w-4 h-4 text-[#FF4500] transition-transform duration-300 group-hover:scale-110" />
                   )}
                   <span className="text-sm text-muted-foreground">{t.author}</span>
                 </div>
@@ -251,14 +253,15 @@ function Testimonials() {
 
 function InstallCommand({ command, label }: { command: string; label: string }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 group">
       <span className="text-sm text-muted-foreground">{label}</span>
-      <div className="flex items-center gap-2 bg-card rounded-lg px-4 py-3 font-mono text-sm border border-border/50">
+      <div className="flex items-center gap-2 bg-card rounded-lg px-4 py-3 font-mono text-sm border border-border/50 transition-all duration-300 hover:border-primary/30 hover:shadow-md">
         <span className="text-primary">$</span>
         <code className="flex-1 text-foreground">{command}</code>
         <button
-          className="text-muted-foreground hover:text-foreground transition-colors"
+          className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-110 active:scale-95"
           title="Copy to clipboard"
+          onClick={() => navigator.clipboard.writeText(command)}
         >
           <Copy className="w-4 h-4" />
         </button>
@@ -297,7 +300,7 @@ export default function Home() {
             >
               <Github className="w-5 h-5" />
             </a>
-            <Button size="sm" className="rounded-full">
+            <Button size="sm" className="rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20">
               Install Now
             </Button>
           </div>
@@ -307,7 +310,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6 bg-grid">
         <div className="max-w-6xl mx-auto text-center">
-          <Badge variant="secondary" className="mb-6">
+          <Badge variant="secondary" className="mb-6 transition-all duration-300 hover:scale-105 cursor-default">
             v2.1.0 — Now with Security Profiles
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
@@ -320,11 +323,11 @@ export default function Home() {
             TinyShield, and Stratoshark from a single, powerful CLI.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <Button size="lg" className="rounded-full glow-green px-8">
+            <Button size="lg" className="rounded-full glow-green px-8 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20">
               <Terminal className="w-4 h-4 mr-2" />
               brew install mantiscli/tap/mantis
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full" asChild>
+            <Button size="lg" variant="outline" className="rounded-full transition-all duration-300 hover:scale-105 hover:bg-card" asChild>
               <a
                 href="https://github.com/gn9nfg2yzj-cyber/mantis"
                 target="_blank"
@@ -454,11 +457,11 @@ export default function Home() {
             Just security.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="rounded-full glow-green px-8">
+            <Button size="lg" className="rounded-full glow-green px-8 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20">
               <Terminal className="w-4 h-4 mr-2" />
               Install Mantis
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full" asChild>
+            <Button size="lg" variant="outline" className="rounded-full transition-all duration-300 hover:scale-105 hover:bg-card" asChild>
               <a
                 href="https://github.com/gn9nfg2yzj-cyber/mantis"
                 target="_blank"
