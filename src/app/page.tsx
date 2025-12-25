@@ -1,5 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { TerminalShowcase } from "@/components/TerminalShowcase";
 import {
   HeroSection,
   SocialProofSection,
@@ -19,6 +20,7 @@ export default function Home() {
         <HeroSection />
         <SocialProofSection />
         <FeaturesSection />
+        <TerminalShowcase />
         <ComparisonSection />
         <TestimonialsSection />
         <InstallationSection />

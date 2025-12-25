@@ -160,3 +160,79 @@
     linear-gradient(90deg, oklch(0.20 0.01 240 / 0.3) 1px, transparent 1px);
   background-size: 50px 50px;
 }
+
+/* 3D Transform utilities for terminal showcase */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-2000 {
+  perspective: 2000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.rotate-y-6 {
+  transform: rotateY(6deg);
+}
+
+.rotate-y--6 {
+  transform: rotateY(-6deg);
+}
+
+.rotate-x-3 {
+  transform: rotateX(3deg);
+}
+
+.-rotate-z-1 {
+  transform: rotateY(6deg) rotateZ(-1deg);
+}
+
+.rotate-z-1 {
+  transform: rotateY(-6deg) rotateZ(1deg);
+}
+
+/* Hover states for 3D transforms */
+.hover\:rotate-y-0:hover {
+  transform: rotateY(0deg) rotateZ(0deg) !important;
+}
+
+.hover\:rotate-x-0:hover {
+  transform: rotateX(0deg) !important;
+}
+
+.hover\:rotate-z-0:hover {
+  transform: rotateZ(0deg) !important;
+}
+
+/* Stacked terminal depth */
+.translate-z-\[-100px\] {
+  transform: translateZ(-100px);
+}
+
+.translate-z-\[-50px\] {
+  transform: translateZ(-50px);
+}
+
+/* Enhanced glow for featured terminals */
+.glow-green-intense {
+  box-shadow:
+    0 0 30px oklch(0.72 0.19 142 / 0.4),
+    0 0 60px oklch(0.72 0.19 142 / 0.2),
+    0 0 100px oklch(0.72 0.19 142 / 0.1);
+}
+
+/* Terminal hover lift effect */
+.terminal-lift {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s ease;
+}
+
+.terminal-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 20px 40px oklch(0 0 0 / 0.4),
+    0 0 30px oklch(0.72 0.19 142 / 0.2);
+}

@@ -107,6 +107,7 @@ export const INSTALL_METHODS = [
 // Navigation links
 export const NAV_LINKS = [
   { href: "#features", label: "Features" },
+  { href: "#demo", label: "Demo" },
   { href: "#compare", label: "Compare" },
   { href: "#install", label: "Install" },
 ] as const;
