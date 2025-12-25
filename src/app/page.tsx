@@ -14,60 +14,103 @@ import {
   Copy,
   ExternalLink,
 } from "lucide-react";
+import {
+  AnimatedTerminal,
+  TerminalWindow,
+  terminalDemos,
+  type TerminalLine,
+} from "@/components/AnimatedTerminal";
 
-function TerminalDemo() {
+function HeroTerminal() {
   return (
-    <div className="terminal glow-green max-w-3xl mx-auto">
-      <div className="terminal-header">
-        <div className="terminal-dot red" />
-        <div className="terminal-dot yellow" />
-        <div className="terminal-dot green" />
-        <span className="text-muted-foreground text-sm ml-2">mantis status</span>
-      </div>
-      <div className="terminal-body text-sm leading-relaxed">
-        <pre className="text-foreground">
-{`$ mantis status
-
-┌─────────────────────────────────────────────────────────────┐
-│                    MANTIS SECURITY STATUS                    │
-├─────────────────────────────────────────────────────────────┤
-│  Layer 1: DNS Protection                                    │
-│    └─ `}<span className="text-green-400">●</span>{` WARP: Connected (1.1.1.1 + Malware blocking)       │
-│                                                             │
-│  Layer 2: Firewall                                          │
-│    └─ `}<span className="text-green-400">●</span>{` TinyShield: Active (312 rules loaded)              │
-│                                                             │
-│  Layer 3: Proxy                                             │
-│    └─ `}<span className="text-green-400">●</span>{` Proxyman: Recording (HTTPS decryption on)          │
-│                                                             │
-│  Layer 4: Network Monitor                                   │
-│    └─ `}<span className="text-green-400">●</span>{` Stratoshark: Capturing (en0)                       │
-│                                                             │
-│  Layer 5: Hosts Blocking                                    │
-│    └─ `}<span className="text-green-400">●</span>{` Custom hosts: 847 domains blocked                  │
-│                                                             │
-│  Layer 6: System Proxy                                      │
-│    └─ `}<span className="text-green-400">●</span>{` HTTP/HTTPS proxy configured                        │
-├─────────────────────────────────────────────────────────────┤
-│  `}<span className="text-green-400 font-bold">Protection: 6/6 layers active</span>{`       Profile: `}<span className="text-cyan-400">stealth</span>{`     │
-└─────────────────────────────────────────────────────────────┘`}
-        </pre>
-      </div>
-    </div>
+    <TerminalWindow title="mantis status" glow className="max-w-3xl mx-auto">
+      <span className="text-primary">$</span> mantis status
+      {"\n\n"}
+      <span className="text-muted-foreground">┌─────────────────────────────────────────────────────────────┐</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"                    "}<span className="font-bold">MANTIS SECURITY STATUS</span>{"                    "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">├─────────────────────────────────────────────────────────────┤</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"  Layer 1: DNS Protection                                    "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"    └─ "}<span className="text-green-400">●</span>{" WARP: Connected (1.1.1.1 + Malware blocking)       "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"                                                             "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"  Layer 2: Firewall                                          "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"    └─ "}<span className="text-green-400">●</span>{" TinyShield: Active (312 rules loaded)              "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"                                                             "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"  Layer 3: Proxy                                             "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"    └─ "}<span className="text-green-400">●</span>{" Proxyman: Recording (HTTPS decryption on)          "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"                                                             "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"  Layer 4: Network Monitor                                   "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"    └─ "}<span className="text-green-400">●</span>{" Stratoshark: Capturing (en0)                       "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"                                                             "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"  Layer 5: Hosts Blocking                                    "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"    └─ "}<span className="text-green-400">●</span>{" Custom hosts: 847 domains blocked                  "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"                                                             "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"  Layer 6: System Proxy                                      "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"    └─ "}<span className="text-green-400">●</span>{" HTTP/HTTPS proxy configured                        "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">├─────────────────────────────────────────────────────────────┤</span>
+      {"\n"}
+      <span className="text-muted-foreground">│</span>{"  "}<span className="text-green-400 font-bold">Protection: 6/6 layers active</span>{"       Profile: "}<span className="text-cyan-400">stealth</span>{"     "}<span className="text-muted-foreground">│</span>
+      {"\n"}
+      <span className="text-muted-foreground">└─────────────────────────────────────────────────────────────┘</span>
+    </TerminalWindow>
   );
 }
 
-function Feature({ icon: Icon, title, description }: { icon: React.ElementType; title: string; description: string }) {
+function FeatureCard({
+  icon: Icon,
+  title,
+  description,
+  terminalDemo,
+  terminalTitle,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  terminalDemo: TerminalLine[];
+  terminalTitle: string;
+}) {
   return (
-    <Card className="bg-card/50 border-border/50 hover:border-primary/50 transition-colors">
-      <CardContent className="p-6">
-        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-          <Icon className="w-6 h-6 text-primary" />
-        </div>
-        <h3 className="text-lg font-semibold mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm">{description}</p>
-      </CardContent>
-    </Card>
+    <div className="space-y-4">
+      <Card className="bg-card/50 border-border/50">
+        <CardContent className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+              <Icon className="w-6 h-6 text-primary" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">{title}</h3>
+              <p className="text-muted-foreground text-sm">{description}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      <AnimatedTerminal
+        title={terminalTitle}
+        lines={terminalDemo}
+        typingSpeed={35}
+        loop={true}
+        triggerOnView={true}
+      />
+    </div>
   );
 }
 
@@ -77,7 +120,7 @@ function InstallCommand({ command, label }: { command: string; label: string }) 
       <span className="text-sm text-muted-foreground">{label}</span>
       <div className="flex items-center gap-2 bg-secondary/50 rounded-lg px-4 py-3 font-mono text-sm">
         <span className="text-muted-foreground">$</span>
-        <code className="flex-1">{command}</code>
+        <code className="flex-1 text-foreground">{command}</code>
         <button
           className="text-muted-foreground hover:text-foreground transition-colors"
           title="Copy to clipboard"
@@ -89,7 +132,15 @@ function InstallCommand({ command, label }: { command: string; label: string }) 
   );
 }
 
-function ComparisonRow({ feature, mantis, manual }: { feature: string; mantis: boolean; manual: boolean }) {
+function ComparisonRow({
+  feature,
+  mantis,
+  manual,
+}: {
+  feature: string;
+  mantis: boolean;
+  manual: boolean;
+}) {
   return (
     <tr className="border-b border-border/50">
       <td className="py-4 px-6 text-left">{feature}</td>
@@ -122,9 +173,24 @@ export default function Home() {
             <span className="font-bold text-lg">Mantis</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
-            <a href="#install" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Install</a>
-            <a href="#compare" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Compare</a>
+            <a
+              href="#features"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#install"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Install
+            </a>
+            <a
+              href="#compare"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Compare
+            </a>
           </div>
           <div className="flex items-center gap-3">
             <a
@@ -173,16 +239,17 @@ export default function Home() {
               </a>
             </Button>
           </div>
-          <TerminalDemo />
+          <HeroTerminal />
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section with Animated Terminals */}
       <section id="features" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              6 layers of protection,<br />
+              6 layers of protection,
+              <br />
               <span className="text-primary">1 command to rule them all</span>
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
@@ -190,36 +257,49 @@ export default function Home() {
               and control over your entire security stack.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Feature
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <FeatureCard
               icon={Layers}
               title="6-Layer Protection"
-              description="Visualize your complete security stack from DNS to firewall to proxy, all in one view."
+              description="Visualize your complete security stack from DNS to firewall to proxy, all in one unified view."
+              terminalDemo={terminalDemos.status}
+              terminalTitle="mantis status"
             />
-            <Feature
+            <FeatureCard
               icon={Terminal}
               title="One Command Control"
               description="Start, stop, and sync all your security tools with simple, memorable commands."
+              terminalDemo={terminalDemos.oneCommand}
+              terminalTitle="mantis start"
             />
-            <Feature
+            <FeatureCard
               icon={Shield}
               title="Security Profiles"
               description="Switch between stealth, normal, and direct modes with a single command."
+              terminalDemo={terminalDemos.profiles}
+              terminalTitle="mantis profile"
             />
-            <Feature
+            <FeatureCard
               icon={Zap}
               title="Interactive REPL"
               description="Tab completion, command history, and smart suggestions for power users."
+              terminalDemo={terminalDemos.interactive}
+              terminalTitle="mantis (interactive)"
             />
-            <Feature
+            <FeatureCard
               icon={Eye}
-              title="Real-time Status"
+              title="Real-time Monitoring"
               description="See what's running, what's blocked, and what needs attention instantly."
+              terminalDemo={terminalDemos.realtime}
+              terminalTitle="mantis watch"
             />
-            <Feature
+            <FeatureCard
               icon={Settings}
-              title="Zero Config"
+              title="Zero Configuration"
               description="Works out of the box on macOS. Auto-detects installed tools and configures itself."
+              terminalDemo={terminalDemos.zeroConfig}
+              terminalTitle="homebrew"
             />
           </div>
         </div>
@@ -265,9 +345,7 @@ export default function Home() {
       <section id="compare" className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Mantis?
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Mantis?</h2>
             <p className="text-muted-foreground">
               Compare unified control vs. managing each tool separately
             </p>
@@ -286,13 +364,41 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                <ComparisonRow feature="Unified control" mantis={true} manual={false} />
-                <ComparisonRow feature="Security profiles" mantis={true} manual={false} />
-                <ComparisonRow feature="Status at a glance" mantis={true} manual={false} />
-                <ComparisonRow feature="Interactive mode" mantis={true} manual={false} />
-                <ComparisonRow feature="Tab completion" mantis={true} manual={false} />
-                <ComparisonRow feature="Command history" mantis={true} manual={false} />
-                <ComparisonRow feature="Free & open source" mantis={true} manual={true} />
+                <ComparisonRow
+                  feature="Unified control"
+                  mantis={true}
+                  manual={false}
+                />
+                <ComparisonRow
+                  feature="Security profiles"
+                  mantis={true}
+                  manual={false}
+                />
+                <ComparisonRow
+                  feature="Status at a glance"
+                  mantis={true}
+                  manual={false}
+                />
+                <ComparisonRow
+                  feature="Interactive mode"
+                  mantis={true}
+                  manual={false}
+                />
+                <ComparisonRow
+                  feature="Tab completion"
+                  mantis={true}
+                  manual={false}
+                />
+                <ComparisonRow
+                  feature="Command history"
+                  mantis={true}
+                  manual={false}
+                />
+                <ComparisonRow
+                  feature="Free & open source"
+                  mantis={true}
+                  manual={true}
+                />
               </tbody>
             </table>
           </div>
