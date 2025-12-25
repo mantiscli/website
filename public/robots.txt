@@ -1,0 +1,8 @@
+# Mantis CLI Website
+# https://mantis-website-inky.vercel.app
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mantis-website-inky.vercel.app/sitemap.xml
